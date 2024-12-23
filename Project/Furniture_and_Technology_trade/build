@@ -1,1 +1,18 @@
+Project: Furniture and Technology Trade Analysis using Hadoop, Spark, and Hive
+Project Overview
+This project focuses on analyzing trade data for furniture and technology products from global stores and suppliers. The goal is to harness data to optimize operations, increase revenue, and enhance customer experience.
 
+Technologies used:
+
+Hadoop: For distributed data storage (HDFS) and large-scale data processing.
+Spark: For fast data processing and complex analysis.
+Hive: For querying and managing big data stored on HDFS using SQL-like syntax.
+Specific Objectives
+Data Integration and Management:
+Collect data from various sources, including sales transactions, inventory, and customer feedback.
+Store the data in HDFS for scalability and fault tolerance.
+Data Analysis:
+Analyze sales trends by product, region, and time period.
+Forecast future shopping trends and demand.
+Reporting and Visualization:
+Create tables and charts to present analytical insights.
