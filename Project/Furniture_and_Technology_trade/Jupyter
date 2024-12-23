@@ -1,0 +1,68 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+from pyspark.sql.functions import month, col
+spark = SparkSession.builder.appName("PomPy").getOrCreate()
+file_path = "home/alvinnguyen41/ProjectSpark/Furniture_and_Technology_trade.csv"
+Furniture_and_Technology_trade_df = spark.read.csv("hdfs://localhost:9000/user/alvinnguyen41/ProjectSpark/input/Furniture_and_Technology_trade.csv")
+Furniture_and_Technology_trade_df.show()
++-------------+----------+---------+-----------+-----------+--------+-----+-----------+------+----------+
+|          _c0|       _c1|      _c2|        _c3|        _c4|     _c5|  _c6|        _c7|   _c8|       _c9|
++-------------+----------+---------+-----------+-----------+--------+-----+-----------+------+----------+
+|TransactionID|      Date|ProductID|ProductName|   Category|Quantity|Price|TotalAmount|Region|CustomerID|
+|            1|2024-12-02|      P02|     Laptop|Electronics|       2|  100|        200|  West|       101|
+|            2|2024-12-03|      P03|      Chair|  Furniture|       3|  150|        450| South|       102|
+|            3|2024-12-04|      P04|      Table|  Furniture|       4|  200|        800|  East|       103|
+|            4|2024-12-05|      P05| Smartphone|Electronics|       5|  250|       1250| North|       104|
+|            5|2024-12-06|      P06|     Laptop|Electronics|       6|  300|       1800|  West|       105|
+|            6|2024-12-07|      P07|      Chair|  Furniture|       7|  350|       2450| South|       106|
+|            7|2024-12-08|      P08|      Table|  Furniture|       8|  400|       3200|  East|       107|
+|            8|2024-12-09|      P09| Smartphone|Electronics|       9|  450|       4050| North|       108|
+|            9|2024-12-10|      P10|     Laptop|Electronics|      10|  500|       5000|  West|       109|
+|           10|2024-12-11|      P11|      Chair|  Furniture|       1|   50|         50| South|       110|
+|           11|2024-12-12|      P12|      Table|  Furniture|       2|  100|        200|  East|       111|
+|           12|2024-12-13|      P13| Smartphone|Electronics|       3|  150|        450| North|       112|
+|           13|2024-12-14|      P14|     Laptop|Electronics|       4|  200|        800|  West|       113|
+|           14|2024-12-15|      P15|      Chair|  Furniture|       5|  250|       1250| South|       114|
+|           15|2024-12-16|      P16|      Table|  Furniture|       6|  300|       1800|  East|       115|
+|           16|2024-12-17|      P17| Smartphone|Electronics|       7|  350|       2450| North|       116|
+|           17|2024-12-18|      P18|     Laptop|Electronics|       8|  400|       3200|  West|       117|
+|           18|2024-12-19|      P19|      Chair|  Furniture|       9|  450|       4050| South|       118|
+|           19|2024-12-20|      P20|      Table|  Furniture|      10|  500|       5000|  East|       119|
++-------------+----------+---------+-----------+-----------+--------+-----+-----------+------+----------+
+only showing top 20 rows
+Furniture_and_Technology_trade_df = Furniture_and_Technology_trade_df.withColumnRenamed("_c7", "TotalAmount").withColumnRenamed("_c8", "Region")
+Furniture_and_Technology_trade_df = Furniture_and_Technology_trade_df.withColumn("TotalAmount", col("TotalAmount").cast("double"))
+region_revenue = Furniture_and_Technology_trade_df.groupBy("Region").sum("TotalAmount")
+region_revenue.show()
++------+----------------+
+|Region|sum(TotalAmount)|
++------+----------------+
+|Region|            NULL|
+| South|         41250.0|
+|  East|         55000.0|
+|  West|         55000.0|
+| North|         41250.0|
++------+----------------+
+Furniture_and_Technology_trade_df = Furniture_and_Technology_trade_df.withColumnRenamed("_c3", "ProductName").withColumnRenamed("_c5", "Quantity")
+Furniture_and_Technology_trade_df = Furniture_and_Technology_trade_df.withColumn("Quantity", col("Quantity").cast("double"))
+top_product = Furniture_and_Technology_trade_df.groupBy("ProductName").sum("Quantity").orderBy("sum(Quantity)", ascending=False)
+top_product.show()
++-----------+-------------+
+|ProductName|sum(Quantity)|
++-----------+-------------+
+|     Laptop|        150.0|
+|      Table|        150.0|
+|      Chair|        125.0|
+| Smartphone|        125.0|
+|ProductName|         NULL|
++-----------+-------------+
+Furniture_and_Technology_trade_df = Furniture_and_Technology_trade_df.withColumnRenamed("_c1", "Date")
+Furniture_and_Technology_trade_df = Furniture_and_Technology_trade_df.withColumn("Month", month(col("Date")))
+monthly_revenue = Furniture_and_Technology_trade_df.groupBy("Month").sum("TotalAmount").orderBy("Month")
+monthly_revenue.show()
++-----+----------------+
+|Month|sum(TotalAmount)|
++-----+----------------+
+| NULL|            NULL|
+|   12|        192500.0|
++-----+----------------+
