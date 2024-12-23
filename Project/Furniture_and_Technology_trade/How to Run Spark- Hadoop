@@ -12,3 +12,4 @@ hdfs namenode -format
 start-all.sh
 hdsf dfs -mkdir /user/alvinnguyen41/ProjectSpark/input
 hdfs dfs -put /home/alvinnguyen41/ProjectSpark/Furniture_and_Technology_trade.csv /user/alvinnguyen41/ProjectSpark/input
+hadoop jar Alvin24-1.0-SNAPSHOT.jar org.example.IPDriver /user/alvinnguyen41/ProjectSpark/input /user/alvinnguyen41/ProjectSpark/output
