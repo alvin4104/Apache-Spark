@@ -1,0 +1,14 @@
+#SPARK
+spark-shell
+
+#Jupyter notebook
+cd ~/pyspark_env
+python3 -m venv venv
+source venv/bin/activate
+jupyter notebook
+
+#Hadoop
+hdfs namenode -format
+start-all.sh
+hdsf dfs -mkdir /user/alvinnguyen41/ProjectSpark/input
+hdfs dfs -put /home/alvinnguyen41/ProjectSpark/Furniture_and_Technology_trade.csv /user/alvinnguyen41/ProjectSpark/input
